@@ -45,19 +45,27 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Chat Sessions Dashboard</h1>
-      </header>
-      <div className="chat-session-list">
-        {sessions.map((session) => (
-          <ChatSessionCard key={session.id} session={session} onSelect={() => setSelectedSession(session)} />
-        ))}
-        {loading && <p>Loading more sessions...</p>}
-        {error && <p>{error}</p>}
+      <div className="sidebar">
+        <header className="App-header">
+          <h1>Messaging</h1>
+        </header>
+        <div className="chat-session-list">
+          {sessions.map((session) => (
+            <ChatSessionCard key={session.id} session={session} onSelect={() => setSelectedSession(session)} />
+          ))}
+          {loading && <p>Loading more sessions...</p>}
+          {error && <p>{error}</p>}
+        </div>
       </div>
-      {selectedSession && (
-        <ChatDetailsModal session={selectedSession} onClose={() => setSelectedSession(null)} />
-      )}
+      <div className="chat-section">
+        {selectedSession ? (
+          <ChatDetailsModal session={selectedSession} onClose={() => setSelectedSession(null)} />
+        ) : (
+          <div className="chat-details">
+            <p>Select a chat session to view messages</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

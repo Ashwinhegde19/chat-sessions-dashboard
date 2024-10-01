@@ -8,8 +8,12 @@ interface ChatSessionCardProps {
 const ChatSessionCard: React.FC<ChatSessionCardProps> = ({ session, onSelect }) => {
   return (
     <div className="chat-session-card" onClick={onSelect}>
-      <h3>{session.name}</h3>
-      <p>Last message: {new Date(session.messages[0].timestamp).toLocaleString()}</p>
+      <div className="dp"></div>
+      <div className="session-details">
+        <div className="session-name">{session.name}</div>
+        <div className="session-info">Agent: Property Manager</div>
+        <div className="session-info">{new Date(session.messages[0].timestamp).toLocaleString()}</div>
+      </div>
     </div>
   );
 };

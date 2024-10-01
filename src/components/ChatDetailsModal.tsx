@@ -7,7 +7,7 @@ interface ChatDetailsModalProps {
 
 const ChatDetailsModal: React.FC<ChatDetailsModalProps> = ({ session, onClose }) => {
   return (
-    <div className="chat-details-modal">
+    <div className="chat-details">
       <div className="modal-header">
         <h2>{session.name}</h2>
         <button onClick={onClose}>Close</button>
