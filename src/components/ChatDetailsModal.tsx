@@ -1,4 +1,4 @@
-import React from 'react';
+import { ChatSession } from "../types";
 
 interface ChatDetailsModalProps {
   session: ChatSession;

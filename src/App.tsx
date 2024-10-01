@@ -3,6 +3,7 @@ import './App.css';
 import { fetchChatSessions } from './services/api';
 import ChatSessionCard from './components/ChatSessionCard';
 import ChatDetailsModal from './components/ChatDetailsModal';
+import { ChatSession } from './types'; // Ensure ChatSession type is imported
 
 const App: React.FC = () => {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
@@ -17,7 +18,13 @@ const App: React.FC = () => {
       setLoading(true);
       try {
         const data = await fetchChatSessions(page, 20);  // Updated perPage to 20
-        setSessions((prevSessions) => [...prevSessions, ...data.chat_sessions]);
+        setSessions((prevSessions) => {
+          // Ensure no duplicate sessions
+          const newSessions = data.chat_sessions.filter(
+            (newSession: ChatSession) => !prevSessions.some((session) => session.id === newSession.id)
+          );
+          return [...prevSessions, ...newSessions];
+        });
         setHasMore(page < data.pages);
       } catch (err) {
         setError('Failed to load sessions. Please try again.');

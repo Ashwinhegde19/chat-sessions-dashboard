@@ -131,8 +131,17 @@ body {
 .time-stamp {
   font-size: 0.8em;
   color: #888;
+  margin-top: 5px;
+}
+
+.user-time {
   text-align: right;
   align-self: flex-end;
+}
+
+.ai-time {
+  text-align: left;
+  align-self: flex-start;
 }
 
 .chat-header {
