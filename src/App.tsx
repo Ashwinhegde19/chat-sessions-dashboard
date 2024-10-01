@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import './App.css';
 import { fetchChatSessions } from './services/api';
 import ChatSessionCard from './components/ChatSessionCard';
@@ -16,7 +16,7 @@ const App: React.FC = () => {
     const loadSessions = async () => {
       setLoading(true);
       try {
-        const data = await fetchChatSessions(page, 10);
+        const data = await fetchChatSessions(page, 20);  // Updated perPage to 20
         setSessions((prevSessions) => [...prevSessions, ...data.chat_sessions]);
         setHasMore(page < data.pages);
       } catch (err) {
@@ -27,16 +27,21 @@ const App: React.FC = () => {
     loadSessions();
   }, [page]);
 
-  const handleScroll = () => {
-    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight && hasMore) {
-      setPage((prevPage) => prevPage + 1);
-    }
+  const loadMoreSessions = async () => {
+    setPage((prevPage) => prevPage + 1);
   };
+
+  const handleScroll = useCallback(() => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight / 2) {
+      loadMoreSessions();
+    }
+  }, []);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
+    
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [hasMore]);
+  }, [handleScroll]);
 
   return (
     <div className="App">
