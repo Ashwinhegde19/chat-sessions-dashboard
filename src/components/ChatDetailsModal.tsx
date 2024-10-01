@@ -1,11 +1,13 @@
-import { ChatSession } from "../types";
+import React from 'react';
+import { Box, Typography, Avatar } from '@mui/material';
+import { ChatSession } from '../types';
 
 interface ChatDetailsModalProps {
   session: ChatSession;
   onClose: () => void;
 }
 
-const ChatDetailsModal: React.FC<ChatDetailsModalProps> = ({ session }) => {
+const ChatDetailsModal: React.FC<ChatDetailsModalProps> = ({ session, onClose }) => {
   const formatDate = (timestamp: string) => {
     const date = new Date(timestamp);
     const now = new Date();
@@ -26,26 +28,35 @@ const ChatDetailsModal: React.FC<ChatDetailsModalProps> = ({ session }) => {
   };
 
   return (
-    <div className="chat-details">
-      <div className="modal-header">
-        <div className="dp">
-          <img src={`https://randomuser.me/api/portraits/thumb/men/${session.id % 100}.jpg`} alt="DP" />
-        </div>
-        <h2>Session {session.id}</h2>
-      </div>
-      <div className="chat-messages">
+    <Box display="flex" flexDirection="column" height="100%">
+      <Box display="flex" alignItems="center" p={2} bgcolor="white" color="black">
+        <Avatar src={`https://randomuser.me/api/portraits/thumb/men/${session.id % 100}.jpg`} alt="DP" sx={{ mr: 2 }} />
+        <Typography variant="h6" fontWeight="bold">Session {session.id}</Typography>
+      </Box>
+      <Box flexGrow={1} p={2} overflow="auto" bgcolor="grey.100">
         {session.messages.map((message, index) => (
-          <div key={`${message.id}-${index}`} className="message-container">
-            <div className={message.action === 'USER' ? 'user-message' : 'ai-message'}>
-              <p>{message.content}</p>
-            </div>
-            <div className="time-stamp">
-              <p>{formatDate(message.timestamp)} {formatTime(message.timestamp)}</p>
-            </div>
-          </div>
+          <Box key={`${message.id}-${index}`} display="flex" flexDirection="column" mb={2}>
+            <Box
+              p={2}
+              borderRadius={1}
+              bgcolor={message.action === 'USER' ? 'grey.800' : 'grey.600'}
+              color="white"
+              alignSelf={message.action === 'USER' ? 'flex-end' : 'flex-start'}
+            >
+              <Typography>{message.content}</Typography>
+            </Box>
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              alignSelf={message.action === 'USER' ? 'flex-end' : 'flex-start'}
+              mt={1}
+            >
+              {formatDate(message.timestamp)} {formatTime(message.timestamp)}
+            </Typography>
+          </Box>
         ))}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

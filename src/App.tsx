@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import './App.css';
+import { Box, Typography, CircularProgress, Alert } from '@mui/material';
 import { fetchChatSessions } from './services/api';
 import ChatSessionCard from './components/ChatSessionCard';
 import ChatDetailsModal from './components/ChatDetailsModal';
@@ -51,12 +51,12 @@ const App: React.FC = () => {
   }, [handleScroll]);
 
   return (
-    <div className="App">
-      <div className="sidebar">
-        <header className="App-header">
-          <h1>Messaging</h1>
-        </header>
-        <div className="chat-session-list">
+    <Box display="flex" height="100vh">
+      <Box width="25%" bgcolor="white" borderRight={1} borderColor="grey.300" overflow="auto">
+        <Box p={2} bgcolor="white" color="black">
+          <Typography variant="h5" fontWeight="bold">Messaging</Typography>
+        </Box>
+        <Box p={2} display="flex" flexDirection="column">
           {sessions.map((session) => (
             <ChatSessionCard
               key={session.id}
@@ -65,23 +65,23 @@ const App: React.FC = () => {
               onSelect={() => setSelectedSessionId(session.id)}
             />
           ))}
-          {loading && <p>Loading more sessions...</p>}
-          {error && <p>{error}</p>}
-        </div>
-      </div>
-      <div className="chat-section">
+          {loading && <CircularProgress />}
+          {error && <Alert severity="error">{error}</Alert>}
+        </Box>
+      </Box>
+      <Box width="75%" display="flex" flexDirection="column">
         {selectedSessionId !== null ? (
           <ChatDetailsModal
             session={sessions.find((session) => session.id === selectedSessionId)!}
             onClose={() => setSelectedSessionId(null)}
           />
         ) : (
-          <div className="chat-details">
-            <p>Select a chat session to view messages</p>
-          </div>
+          <Box display="flex" flexGrow={1} alignItems="center" justifyContent="center">
+            <Typography>Select a chat session to view messages</Typography>
+          </Box>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
