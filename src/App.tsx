@@ -7,7 +7,7 @@ import ChatDetailsModal from './components/ChatDetailsModal';
 const App: React.FC = () => {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [selectedSession, setSelectedSession] = useState<ChatSession | null>(null);
+  const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState<boolean>(true);
@@ -51,15 +51,23 @@ const App: React.FC = () => {
         </header>
         <div className="chat-session-list">
           {sessions.map((session) => (
-            <ChatSessionCard key={session.id} session={session} onSelect={() => setSelectedSession(session)} />
+            <ChatSessionCard
+              key={session.id}
+              session={session}
+              isSelected={session.id === selectedSessionId}
+              onSelect={() => setSelectedSessionId(session.id)}
+            />
           ))}
           {loading && <p>Loading more sessions...</p>}
           {error && <p>{error}</p>}
         </div>
       </div>
       <div className="chat-section">
-        {selectedSession ? (
-          <ChatDetailsModal session={selectedSession} onClose={() => setSelectedSession(null)} />
+        {selectedSessionId !== null ? (
+          <ChatDetailsModal
+            session={sessions.find((session) => session.id === selectedSessionId)!}
+            onClose={() => setSelectedSessionId(null)}
+          />
         ) : (
           <div className="chat-details">
             <p>Select a chat session to view messages</p>
