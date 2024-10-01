@@ -44,6 +44,7 @@ const App: React.FC = () => {
   }, [handleScroll]);
 
   return (
+    
     <div className="App">
       <header className="App-header">
         <h1>Chat Sessions Dashboard</h1>
